@@ -165,66 +165,6 @@ class ModelComparator:
         self.plot_training_curves()
         
         print(f"\nВсе результаты сохранены в {output_dir}")
-    
-    def generate_report(self, output_dir: str = RESULTS_DIR) -> str:
-        report_lines = []
-        report_lines.append("=" * 80)
-        report_lines.append("ОТЧЁТ О СРАВНЕНИИ МОДЕЛЕЙ РАСПОЗНАВАНИЯ ДЕЙСТВИЙ")
-        report_lines.append(f"Дата: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-        report_lines.append("=" * 80)
-        report_lines.append("")
-        
-        report_lines.append("СВОДНАЯ ТАБЛИЦА РЕЗУЛЬТАТОВ")
-        report_lines.append("-" * 40)
-        df = self.get_comparison_table()
-        report_lines.append(df.to_string(index=False))
-        report_lines.append("")
-        
-        if self.results:
-            best_model = max(self.results.items(), key=lambda x: x[1].accuracy)
-            report_lines.append(f"Лучшая модель по Accuracy: {best_model[0]} ({best_model[1].accuracy:.4f})")
-            report_lines.append("")
-        
-        report_lines.append("F1-SCORE ПО КЛАССАМ")
-        report_lines.append("-" * 40)
-        df_f1 = self.get_f1_table_per_class()
-        report_lines.append(df_f1.to_string(index=False))
-        report_lines.append("")
-        
-        report_lines.append("АНАЛИЗ ОШИБОК")
-        report_lines.append("-" * 40)
-        
-        for name, cm in self.confusion_matrices.items():
-            report_lines.append(f"\nМодель: {name}")
-            
-            errors = []
-            for i in range(len(self.class_names)):
-                for j in range(len(self.class_names)):
-                    if i != j and cm[i, j] > 0:
-                        errors.append({
-                            'true': self.class_names[i],
-                            'pred': self.class_names[j],
-                            'count': cm[i, j]
-                        })
-            
-            errors.sort(key=lambda x: x['count'], reverse=True)
-            if errors:
-                report_lines.append("  Наиболее частые ошибки:")
-                for err in errors[:3]:
-                    report_lines.append(f"    {err['true']} → {err['pred']}: {err['count']} раз")
-        
-        report_lines.append("")
-        report_lines.append("=" * 80)
-        
-        report_text = "\n".join(report_lines)
-        
-        os.makedirs(output_dir, exist_ok=True)
-        report_path = os.path.join(output_dir, 'comparison_report.txt')
-        with open(report_path, 'w', encoding='utf-8') as f:
-            f.write(report_text)
-        print(f"Отчёт сохранён: {report_path}")
-        
-        return report_text
 
 def compare_all_models(
     model_results: Dict[str, Tuple[np.ndarray, np.ndarray]],
@@ -241,7 +181,6 @@ def compare_all_models(
     
     if save_results:
         comparator.save_results(output_dir)
-        comparator.generate_report(output_dir)
     
     return comparator
 
@@ -269,71 +208,3 @@ def save_comparison_table(results: Dict[str, ClassificationMetrics], output_path
     df = pd.DataFrame(rows)
     df.to_csv(output_path, index=False)
     print(f"Таблица сохранена: {output_path}")
-
-def generate_comparison_report(
-    results: Dict[str, ClassificationMetrics],
-    confusion_matrices: Dict[str, np.ndarray],
-    class_names: List[str] = CLASS_NAMES_RU,
-    output_path: Optional[str] = None
-) -> str:
-    report_lines = []
-    report_lines.append("=" * 80)
-    report_lines.append("ОТЧЁТ О СРАВНЕНИИ МОДЕЛЕЙ РАСПОЗНАВАНИЯ ДЕЙСТВИЙ")
-    report_lines.append(f"Дата: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-    report_lines.append("=" * 80)
-    report_lines.append("")
-    
-    report_lines.append("СВОДНАЯ ТАБЛИЦА РЕЗУЛЬТАТОВ")
-    report_lines.append("-" * 40)
-    report_lines.append(f"{'Модель':<15} {'Accuracy':<12} {'Precision':<12} {'Recall':<12} {'F1-score':<12}")
-    
-    for name, metrics in results.items():
-        report_lines.append(f"{name:<15} {metrics.accuracy:<12.4f} {metrics.precision:<12.4f} {metrics.recall:<12.4f} {metrics.f1_score:<12.4f}")
-    
-    report_lines.append("")
-    
-    best_model = max(results.items(), key=lambda x: x[1].accuracy)
-    report_lines.append(f"Лучшая модель по Accuracy: {best_model[0]} ({best_model[1].accuracy:.4f})")
-    report_lines.append("")
-    
-    report_lines.append("АНАЛИЗ ОШИБОК")
-    report_lines.append("-" * 40)
-    
-    for name, cm in confusion_matrices.items():
-        report_lines.append(f"\nМодель: {name}")
-        
-        errors = []
-        for i in range(len(class_names)):
-            for j in range(len(class_names)):
-                if i != j and cm[i, j] > 0:
-                    errors.append({
-                        'true': class_names[i],
-                        'pred': class_names[j],
-                        'count': cm[i, j]
-                    })
-        
-        errors.sort(key=lambda x: x['count'], reverse=True)
-        if errors:
-            report_lines.append("  Наиболее частые ошибки:")
-            for err in errors[:5]:
-                report_lines.append(f"    {err['true']} → {err['pred']}: {err['count']} раз(а)")
-            
-            report_lines.append("  Точность по классам:")
-            for i, class_name in enumerate(class_names):
-                total = cm[i, :].sum()
-                correct = cm[i, i]
-                acc = correct / total * 100 if total > 0 else 0
-                report_lines.append(f"    {class_name}: {acc:.1f}% ({correct}/{total})")
-    
-    report_lines.append("")
-    report_lines.append("=" * 80)
-    
-    report_text = "\n".join(report_lines)
-    
-    if output_path:
-        os.makedirs(os.path.dirname(output_path), exist_ok=True)
-        with open(output_path, 'w', encoding='utf-8') as f:
-            f.write(report_text)
-        print(f"Отчёт сохранён: {output_path}")
-    
-    return report_text

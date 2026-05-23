@@ -583,7 +583,6 @@ def main(args):
         )
         
         comparator.save_results(str(RESULTS_DIR))
-        comparator.generate_report(str(RESULTS_DIR))
         
         print("\n" + "=" * 60)
         print("РЕЗУЛЬТАТЫ СОХРАНЕНЫ")

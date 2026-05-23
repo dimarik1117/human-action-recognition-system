@@ -31,8 +31,7 @@ from .compare_models import (
     ModelComparator,
     compare_all_models,
     print_comparison_table,
-    save_comparison_table,
-    generate_comparison_report
+    save_comparison_table
 )
 
 __all__ = [
@@ -62,6 +61,5 @@ __all__ = [
     'ModelComparator',
     'compare_all_models',
     'print_comparison_table',
-    'save_comparison_table',
-    'generate_comparison_report'
+    'save_comparison_table'
 ]

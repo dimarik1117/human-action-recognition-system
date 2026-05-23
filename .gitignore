@@ -1,15 +1,9 @@
-# =====================================================
-# Python
-# =====================================================
-
-# Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
 *.so
 *.pyd
 
-# Distribution / packaging
 .Python
 build/
 develop-eggs/
@@ -29,15 +23,12 @@ share/python-wheels/
 *.egg
 MANIFEST
 
-# PyInstaller
 *.manifest
 *.spec
 
-# Installer logs
 pip-log.txt
 pip-delete-this-directory.txt
 
-# Unit test / coverage reports
 htmlcov/
 .tox/
 .nox/
@@ -53,35 +44,26 @@ coverage.xml
 cover/
 *.pytest_cache/
 
-# Jupyter Notebook
 .ipynb_checkpoints
 *.ipynb_checkpoints
 */.ipynb_checkpoints/*
 *.pynb
 
-# pyenv
 .python-version
 
-# pipenv
 Pipfile.lock
 
-# poetry
 poetry.lock
 
-# pdm
 .pdm.toml
 
-# PEP 582
 __pypackages__/
 
-# Celery
 celerybeat-schedule
 celerybeat.pid
 
-# SageMath
 *.sage.py
 
-# Environments
 .env
 .venv
 env/
@@ -92,27 +74,21 @@ venv.bak/
 .python_env/
 .venv*/
 
-# Spyder project settings
 .spyderproject
 .spyproject
 
-# Rope project settings
 .ropeproject
 
-# mkdocs documentation
 /site
 
-# mypy
 .mypy_cache/
 .dmypy.json
 dmypy.json
 .pyre/
 .pytype/
 
-# Pyre type checker
 .pyre/
 
-# IDE settings
 .vscode/
 .idea/
 *.swp
@@ -123,23 +99,14 @@ dmypy.json
 .settings/
 *.code-workspace
 
-# =====================================================
-# Project-specific
-# =====================================================
-
-# Data directories (raw videos are large, not for git)
 data/
 
-# Results and outputs
-results/
 test/
 test_results/
 
-# Recordings from real-time inference
 recordings/
 screenshots/
 
-# Temporary files
 *.tmp
 *.temp
 *.cache
@@ -147,7 +114,6 @@ screenshots/
 *.out
 *.err
 
-# OS specific files
 .DS_Store
 .DS_Store?
 ._*
@@ -158,46 +124,27 @@ Thumbs.db
 *.bak
 *.orig
 
-# Database files
 *.db
 *.sqlite
 *.sqlite3
 
-# Model exports
 *.onnx
 *.tflite
 *.pb
 
-# TensorBoard logs
 logs/
 runs/
 
-# Compressed files (usually not tracked)
 *.zip
 *.tar
 *.gz
 *.7z
 *.rar
 
-# Backup files
 *.backup
 *.old
 *.save
 
-# =====================================================
-# Optional: keep small sample data for testing
-# =====================================================
-# !data/raw/.gitkeep
-# !data/processed/.gitkeep
-# !data/annotations/.gitkeep
-# !checkpoints/.gitkeep
-# !results/.gitkeep
-# !recordings/.gitkeep
-# !screenshots/.gitkeep
-
-# =====================================================
-# Secret / configuration files with sensitive data
-# =====================================================
 *.secret
 *.key
 *.pem
